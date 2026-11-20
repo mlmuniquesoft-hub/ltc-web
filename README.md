@@ -14,8 +14,11 @@ npm run dev
 ## Production
 
 ```bash
+npm install
 npm run build
-npm start
 ```
 
-Serves `dist/` on `PORT` (default `4176`). Point the `language.osmartbd.com` vhost / reverse proxy at this process.
+`app.js` is **zero-dependency** (Node `http` only — no Express). Plesk/Passenger can start it without `node_modules` as long as `dist/index.html` exists.
+
+Application startup file: `app.js`  
+Document root / static: build into `dist/` first, then restart the Node app.

@@ -18,7 +18,9 @@ npm install
 npm run build
 ```
 
-`app.js` is **zero-dependency** (Node `http` only — no Express). Plesk/Passenger can start it without `node_modules` as long as `dist/index.html` exists.
+Build is `vite build` only (no global `tsc`). Vite + TypeScript are in `dependencies` so Plesk production installs still work.
+
+`app.js` is **zero-dependency** (Node `http` only). Passenger can start it after `dist/index.html` exists.
 
 Application startup file: `app.js`  
 Document root / static: build into `dist/` first, then restart the Node app.

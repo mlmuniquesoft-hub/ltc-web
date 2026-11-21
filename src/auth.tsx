@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { fetchMe, login as apiLogin } from './api'
 
 type AuthState = {
@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [enrollments, setEnrollments] = useState<unknown[]>([])
   const [ready, setReady] = useState(false)
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (!localStorage.getItem('ltc_token')) {
       setMember(null)
       setEnrollments([])
@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const me = await fetchMe()
     setMember(me.member)
     setEnrollments(me.enrollments || [])
-  }
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setReady(true)
       }
     })()
-  }, [token])
+  }, [token, refresh])
 
   const value = useMemo<AuthState>(() => ({
     token,
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setEnrollments([])
     },
     refresh,
-  }), [token, member, enrollments, ready])
+  }), [token, member, enrollments, ready, refresh])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

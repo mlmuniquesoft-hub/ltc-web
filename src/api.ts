@@ -88,7 +88,14 @@ export async function fetchMe() {
   return data.data
 }
 
-export async function enroll(slug: string, payload: { batch_id?: number; payment_method: string; password?: string; note?: string }) {
+export async function enroll(slug: string, payload: {
+  batch_id?: number
+  payment_method: string
+  password?: string
+  note?: string
+  return_url?: string
+  channel?: string
+}) {
   const { data } = await api.post(`/ltc/courses/${slug}/enroll`, payload)
   return data
 }

@@ -36,10 +36,16 @@ export default function CourseDetail() {
         batch_id: batchId || undefined,
         payment_method: method,
         password: method === 'pay_wallet' ? password : undefined,
+        channel: 'web',
+        return_url: `${window.location.origin}/me`,
       })
       setMsg(res.message || t('enrolled'))
-      if (res.data?.redirect_url) window.location.href = res.data.redirect_url
-      else nav('/me')
+      const payUrl = res.data?.gateway_url || res.data?.redirect_url
+      if (payUrl) {
+        window.location.href = payUrl
+        return
+      }
+      nav('/me')
     } catch (err: any) {
       setMsg(err?.response?.data?.message || err.message || t('enrollFailed'))
     } finally {
